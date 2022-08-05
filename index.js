@@ -8,8 +8,36 @@ import dotenv from 'dotenv';
 dotenv.config();
 const keys = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
+const VIDEO_ID = "xbXZFoAqO2E";
+
 const main = async () => {
   const oAuth2Client = await getAuthenticatedClient();
+  const listVideos =
+    await oAuth2Client.request({url: `https://youtube.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${VIDEO_ID}`});
+  listVideos.data.items.forEach(async (v) => {
+    const lid = v.liveStreamingDetails.activeLiveChatId;
+    console.log(v.liveStreamingDetails.activeLiveChatId);
+    const chat = await oAuth2Client.request({
+      url: `https://youtube.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${lid}&part=snippet%2CauthorDetails`,
+    });
+    console.log(chat.data.items);
+
+    await oAuth2Client.request({
+      url: "https://youtube.googleapis.com/youtube/v3/liveChat/messages?part=snippet",
+      method: "POST",
+      data: {
+        snippet: {
+          liveChatId: lid,
+          type: "textMessageEvent",
+          textMessageDetails: {
+            messageText: "Hello, I am a bot",
+          },
+        },
+      },
+    });
+  })
+
+  if (false) {
   const url =
     // "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet%2Cstatus&mine=true";
     // 6avAha_GoBQ broadcast ID 
@@ -39,7 +67,7 @@ const main = async () => {
         },
       });
     });
-
+  }
   //const tokenInfo = await oAuth2Client.getTokenInfo(
   //  oAuth2Client.credentials.access_token
   //);
