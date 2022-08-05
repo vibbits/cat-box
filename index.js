@@ -3,15 +3,19 @@ import http from "http";
 import url from "url";
 import open from "open";
 import destroyer from "server-destroy";
+import dotenv from 'dotenv';
 
+dotenv.config();
 const keys = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 const main = async () => {
   const oAuth2Client = await getAuthenticatedClient();
   const url =
-    "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet%2Cstatus&mine=true";
+    // "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet%2Cstatus&mine=true";
+    // 6avAha_GoBQ broadcast ID 
+    "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet%2Cstatus&id=jjdKjfzRfP8"; 
   const res = await oAuth2Client.request({ url });
-  //console.log(JSON.stringify(res.data));
+  console.log(res.data);
   res.data.items
     .filter((item) => item.status.lifeCycleStatus === "live")
     .map((item) => item.snippet.liveChatId)
