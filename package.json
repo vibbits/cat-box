@@ -1,0 +1,20 @@
+{
+  "name": "code-eval-bot",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^4.3.1"
+  },
+  "dependencies": {
+    "google-auth-library": "^8.1.1",
+    "open": "^8.4.0",
+    "server-destroy": "^1.0.1"
+  }
+}
